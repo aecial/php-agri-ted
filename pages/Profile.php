@@ -1,3 +1,6 @@
+<?php
+  session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -39,109 +42,9 @@
   </head>
   <body>
     <!--Navigation Bar-->
-    <nav
-      class="navbar nav-underline sticky-lg-top navbar-expand-xxl bg-body-tertiary"
-    >
-      <div class="container-fluid">
-        <a
-          class="navbar-brand d-flex align-items-center text-success"
-          id="brand"
-          href="#"
-          ><img src="../assets/logo-nobg.png" class="img-fluid logo-pic" />
-          <p class="title">Agrikultur'App</p></a
-        >
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon fs-1"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul
-            class="navbar-nav ms-auto mb-2 mb-lg-0 text-end d-flex align-items-xxl-center"
-          >
-            <li class="nav-item me-2">
-              <a
-                class="nav-link active text-success"
-                id="nav-link"
-                aria-current="page"
-                href="AuctionPage.html"
-                ><i class="fa-solid fa-gavel"></i> Auction Page</a
-              >
-            </li>
-            <li class="nav-item d-block d-xxl-none">
-              <a
-                class="nav-link text-success"
-                href="Notifications.html"
-                id="nav-link"
-                ><i class="fa-solid fa-bell"></i> Notifications</a
-              >
-            </li>
-            <li class="nav-item me-2">
-              <a
-                class="nav-link text-success"
-                href="Guidelines.html"
-                id="nav-link"
-                ><i class="fa-solid fa-table"></i> Pricing Guidelines</a
-              >
-            </li>
-            <li class="nav-item">
-              <p class="desc text-end d-block d-xxl-none">
-                Logged In as:
-                <strong
-                  ><a
-                    href="Profile.html"
-                    class="nav-link text-success text-decoration-underline"
-                    >Teddy Pascual</a
-                  ></strong
-                >
-              </p>
-            </li>
-
-            <li class="nav-item me-2">
-              <a
-                class="btn btn-success w-auto fs-3 d-block d-xxl-none float-end"
-                href="../pages/Login.html"
-                >Sign Out</a
-              >
-            </li>
-          </ul>
-          <div class="nav-pic d-none d-xxl-block btn-group dropdown">
-            <button
-              type="button"
-              class="btn dropdown-toggle"
-              id="dropdownMenuButton"
-              data-bs-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <img src="../assets/Teddy.jpg" class="img-fluid rounded-circle" />
-            </button>
-            <div
-              class="dropdown-menu fs-3"
-              id="dropdown-menu"
-              aria-labelledby="dropdownMenuButton"
-            >
-              <a class="dropdown-item text-success" href="Profile.html"
-                ><i class="fa-solid fa-user"></i> Profile</a
-              >
-              <a class="dropdown-item text-success" href="Notifications.html"
-                ><i class="fa-solid fa-bell"></i> Notifications</a
-              >
-              <div class="dropdown-divider"></div>
-              <a class="btn btn-success w-100 fs-3" href="../pages/Login.html"
-                ><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a
-              >
-            </div>
-          </div>
-        </div>
-      </div>
-    </nav>
+    <?php
+      include("navigation.php");
+    ?>
     <!--Navigation Bar-->
     <main class="container-fluid">
       <div class="row row-cols-1 row-cols-lg-2">
@@ -149,26 +52,38 @@
         <div
           class="col d-flex flex-column align-items-center justify-content-center img-section"
         >
-          <img
-            src="../assets/avatar1.svg"
-            class="img-fluid rounded-circle"
-            alt=""
-            id="profile-pic"
-          />
+        <?php
+        include("../database.php");
+        $sql = "SELECT * from profileimg WHERE id='{$_SESSION['id']}';";
+        $result = mysqli_query($conn, $sql);
+        $rand = mt_rand();
+        if (mysqli_num_rows($result) > 0) {
+          while($row = mysqli_fetch_assoc($result)) {
+            echo "<img
+            src='{$row['img_location']}'
+            class='img-fluid rounded-circle'
+            alt=''
+            id='profile-pic'
+            {$rand}
+          />";
+          }
+        }
+      ?>
           <label for="change-prof" class="md-title mt-5"
             >Change Profile Picture</label
           >
-          <form action="" class="w-755">
+          <form action="<?php $_SERVER["PHP_SELF"] ?>" class="w-755" method="post"  enctype='multipart/form-data'>
             <div class="input-group">
               <input
                 type="file"
+                name="file"
                 class="form-control bg-transparent"
                 id="change-prof"
-                accept="image/png, image/jpeg"
               />
               <button
                 type="submit"
                 class="btn btn-success"
+                name="submit"
                 id="save-img-btn"
                 disabled
                 onclick="saveProfPic()"
@@ -181,7 +96,7 @@
         </div>
         <!--Information Container-->
         <div class="col d-flex flex-column align-items-center">
-          <form action="" class="fs-5 information-section p-4" id="info-form">
+          <form action="<?php $_SERVER["PHP_SELF"] ?>" class="fs-5 information-section p-4" id="info-form" method="post">
             <p class="title text-light">Personal Information</p>
             <!--Name Information-->
             <div class="d-flex mb-3">
@@ -189,9 +104,11 @@
                 type="text"
                 class="form-control"
                 id="name_inp"
-                placeholder="Teddy Pascual"
+                name="fullName"
+                placeholder="<?php echo "{$_SESSION["first_name"]} {$_SESSION["last_name"]}" ?>"
                 onchange="boom()"
                 disabled
+                <?php echo mt_rand(); ?>
               />
               <button
                 class="edit-btn text-success"
@@ -210,9 +127,11 @@
                 type="text"
                 class="form-control"
                 id="email_inp"
-                placeholder="kledted23@gmail.com"
+                name="email"
+                placeholder="<?php echo "{$_SESSION["email"]}" ?>"
                 onchange="boom()"
                 disabled
+                <?php mt_rand() ?>
               />
               <button
                 class="edit-btn text-success"
@@ -231,7 +150,7 @@
                 type="text"
                 class="form-control"
                 id="address_inp"
-                placeholder="Capas,Tarlac"
+                placeholder="Balanti,Tarlac"
                 onchange="boom()"
                 disabled
               />
@@ -252,9 +171,11 @@
                 type="text"
                 class="form-control"
                 id="mobileNum_inp"
-                placeholder="09982409945"
+                name="number"
+                placeholder="<?php echo "{$_SESSION["phone_number"]}" ?>"
                 onchange="boom()"
                 disabled
+                <?php mt_rand() ?>
               />
               <button
                 class="edit-btn text-success"
@@ -270,6 +191,7 @@
               type="submit"
               class="btn btn-success fs-1"
               id="save-btn"
+              name="infoSave"
               disabled
             >
               Save
@@ -282,3 +204,77 @@
     <script src="../index.js"></script>
   </body>
 </html>
+<?php
+  include("../database.php");
+  if(isset($_POST["infoSave"])) {
+    if(isset($_POST["fullName"])) {
+      $name = $_POST["fullName"];
+      $full_name = explode(" ", $name);
+      $first_name = $full_name[0];
+      $last_name = null;
+      for($i = 1;$i<=count($full_name)-1;$i++) {
+        $last_name = $last_name." ".$full_name[$i];
+      }
+      $last_nameFinal = trim($last_name);
+      $sqlFirst = "UPDATE users SET first_name = '{$first_name}'  WHERE id='{$_SESSION['id']}';";
+      $resultFirst = mysqli_query($conn, $sqlFirst);
+      $sqlLast = "UPDATE users SET last_name = '{$last_nameFinal}'  WHERE id='{$_SESSION['id']}';";
+      $resultLast = mysqli_query($conn, $sqlLast);
+      $_SESSION["first_name"] = $first_name;
+      $_SESSION["last_name"] = $last_nameFinal;
+    }
+    if(isset($_POST["email"])) {
+      $email = $_POST["email"];
+      $sqlEmail = "UPDATE users SET email = '{$email}'WHERE id=' {$_SESSION['id']}';";
+      $resultEmail = mysqli_query($conn, $sqlEmail);
+      $_SESSION["email"] = $email;
+    }
+    if(isset($_POST["number"])) {
+      $number = $_POST["number"];
+      $sqlNumber = "UPDATE users SET phone_number = '{$number}'WHERE id=' {$_SESSION['id']}';";
+      $resultNumber = mysqli_query($conn, $sqlNumber);
+      $_SESSION["phone_number"] = $number;
+    }
+    header("Location: Profile.php?Lezgo!");
+    
+  }
+  
+?>
+<?php
+include("../database.php");
+  if(isset($_POST["submit"])) {
+    $file = $_FILES['file'];
+
+    $fileName = $_FILES['file']['name'];
+    $fileTmpName = $_FILES['file']['tmp_name'];
+    $fileSize = $_FILES['file']['size'];
+    $fileError = $_FILES['file']['error'];
+    $fileType = $_FILES['file']['type'];
+
+    $fileExt = explode('.', $fileName);
+    $fileActualExt = strtolower(end($fileExt));
+
+    $allowed = array('jpg', 'jpeg', 'png', 'pdf');
+
+    if(in_array($fileActualExt, $allowed)) {
+      if($fileError === 0) {
+        if($fileSize < 500000) {
+          $fileNameNew = "profile".$_SESSION['id'].".".$fileActualExt;
+          $fileDestination = '../uploads/'.$fileNameNew;
+          move_uploaded_file($fileTmpName, $fileDestination);
+          $sqlLoc = "UPDATE profileimg SET img_location = '{$fileDestination}' WHERE id='{$_SESSION['id']}';";
+          $resultLoc = mysqli_query($conn, $sqlLoc);
+        }
+        else {
+          echo "Maximum file size exceeded!";
+        }
+      }
+      else {
+        echo "There was an error uploading your file!";
+      }
+    }
+    else {
+      echo "You cannot upload files of this type!";
+    }
+  }
+?>

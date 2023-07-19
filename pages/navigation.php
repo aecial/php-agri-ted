@@ -1,3 +1,11 @@
+<?php 
+  if(isset($_POST["signout"])) {
+    session_destroy();
+    header("Location: http://localhost/agri/pages/Login.php"); 
+    exit();
+    echo "<h1>You have logged out!</h1>";
+  }
+?>
 <nav
 class="navbar nav-underline sticky-lg-top navbar-expand-xxl bg-body-tertiary">
 <div class="container-fluid">
@@ -28,14 +36,14 @@ class="navbar nav-underline sticky-lg-top navbar-expand-xxl bg-body-tertiary">
           class="nav-link active text-success"
           id="nav-link"
           aria-current="page"
-          href="AuctionPage.html"
+          href="AuctionPage.php"
           ><i class="fa-solid fa-gavel"></i> Auction Page</a
         >
       </li>
       <li class="nav-item d-block d-xxl-none">
         <a
           class="nav-link text-success"
-          href="Notifications.html"
+          href="Notifications.php"
           id="nav-link"
           ><i class="fa-solid fa-bell"></i> Notifications</a
         >
@@ -43,7 +51,7 @@ class="navbar nav-underline sticky-lg-top navbar-expand-xxl bg-body-tertiary">
       <li class="nav-item me-2">
         <a
           class="nav-link text-success"
-          href="Guidelines.html"
+          href="Guidelines.php"
           id="nav-link"
           ><i class="fa-solid fa-table"></i> Pricing Guidelines</a
         >
@@ -53,7 +61,7 @@ class="navbar nav-underline sticky-lg-top navbar-expand-xxl bg-body-tertiary">
           Logged In as:
           <strong
             ><a
-              href="Profile.html"
+              href="Profile.php"
               class="nav-link text-success text-decoration-underline"
               ><?php echo "{$_SESSION["first_name"]} {$_SESSION["last_name"]}" ?></a
             ></strong
@@ -72,7 +80,7 @@ class="navbar nav-underline sticky-lg-top navbar-expand-xxl bg-body-tertiary">
         </form>
       </li>
     </ul>
-    <div class="nav-pic d-none d-xxl-block btn-group dropdown">
+    <div class="nav-pic d-none d-xxl-flex btn-group dropdown">
       <button
         type="button"
         class="btn dropdown-toggle"
@@ -81,17 +89,32 @@ class="navbar nav-underline sticky-lg-top navbar-expand-xxl bg-body-tertiary">
         aria-haspopup="true"
         aria-expanded="false"
       >
-        <img src="../assets/Teddy.jpg" class="img-fluid rounded-circle" />
+      <?php
+        include("../database.php");
+        $sql = "SELECT * from profileimg WHERE id='{$_SESSION['id']}';";
+        $result = mysqli_query($conn, $sql);
+        if (mysqli_num_rows($result) > 0) {
+          while($row = mysqli_fetch_assoc($result)) {
+            if($row["status"] == 1) {
+              echo "<img src='{$row['img_location']}' class='img-fluid rounded-circle' id='myPic' />";
+            }
+            else {
+              echo "<img src='../assets/avatar1.svg' class='img-fluid rounded-circle' />";
+            }
+          }
+        }
+      ?>
+        
       </button>
       <div
         class="dropdown-menu fs-3"
         id="dropdown-menu"
         aria-labelledby="dropdownMenuButton"
       >
-        <a class="dropdown-item text-success" href="Profile.html"
+        <a class="dropdown-item text-success" href="Profile.php"
           ><i class="fa-solid fa-user"></i> Profile</a
         >
-        <a class="dropdown-item text-success" href="Notifications.html"
+        <a class="dropdown-item text-success" href="Notifications.php"
           ><i class="fa-solid fa-bell"></i> Notifications</a
         >
         <div class="dropdown-divider"></div>

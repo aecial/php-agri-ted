@@ -92,9 +92,11 @@
     if(mysqli_num_rows($result) > 0)  {
       while($row = mysqli_fetch_assoc($result)) {
         if($row["password"] == $password){
+          $_SESSION["id"] = $row["id"];
           $_SESSION["first_name"] = $row["first_name"];
           $_SESSION["last_name"] = $row["last_name"];
           $_SESSION["email"] = $row["email"];
+          $_SESSION["phone_number"] = $row["phone_number"];
           if($row["type"] == 1 || $row["type"] == 2) {
             header("Location: AuctionPage.php");
           }
