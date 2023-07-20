@@ -264,6 +264,8 @@ include("../database.php");
           move_uploaded_file($fileTmpName, $fileDestination);
           $sqlLoc = "UPDATE profileimg SET img_location = '{$fileDestination}' WHERE id='{$_SESSION['id']}';";
           $resultLoc = mysqli_query($conn, $sqlLoc);
+          $sqlstat = "UPDATE profileimg SET status =1 WHERE id='{$_SESSION['id']}';";
+          $resultstat = mysqli_query($conn, $sqlstat);
         }
         else {
           echo "Maximum file size exceeded!";
