@@ -187,7 +187,7 @@
           if($row["crop_type"] == 4){
             echo '
           <div class="card" style="width: 18rem">
-          <img src="../assets/Ampalaya.jpeg" class="card-img-top" alt="" />
+          <img src="'.$row["img_location"].'" class="card-img-top" alt="" />
           <div class="card-body">
             <h5 class="card-title md-title">Farmer:'.$row["owner"].'</h5>
             <div class="card-text">

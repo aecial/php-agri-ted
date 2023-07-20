@@ -165,7 +165,7 @@
         <div class="d-flex justify-content-center align-items-center">
           <div class="card mt-5 form-card">
             <div class="card-body">
-              <form class="d-flex flex-column" id="createForm" action="<?php $_SERVER["PHP_SELF"] ?>" method="post">
+              <form class="d-flex flex-column" id="createForm" action="<?php $_SERVER["PHP_SELF"] ?>" method="post" enctype='multipart/form-data'>
                 <!--Select Input-->
                 <select
                   id="crop_category"
@@ -246,7 +246,7 @@
                     onkeyup="btnDis()"
                     id="crop_picture"
                     type="file"
-                    accept="image/png, image/jpeg"
+                    name="file"
                     class="form-control fs-1 bg-transparent text-light"
                     placeholder="Picture"
                     aria-label="Picture"
@@ -286,7 +286,7 @@
 <?php
   if(isset($_POST["submit"])) {
     if($_POST["crop_type"] == 0) {
-      echo "<h1>Please choose a crop type</h1>";
+      echo "<script>alert('Please choose a crop type')</script>";
     }
     else{
       $owner = "{$_SESSION["first_name"]} {$_SESSION["last_name"]}";
@@ -294,7 +294,41 @@
       $base_price = $_POST["base_price"];
       $volume = $_POST["volume"];
       include("../database.php");
-      $sql = "INSERT INTO auctions (owner, crop_type, base_price, volume) VALUES ('$owner', '$crop_type', '$base_price', '$volume')";
+
+      //file upload
+      $file = $_FILES['file'];
+
+      $fileName = $_FILES['file']['name'];
+      $fileTmpName = $_FILES['file']['tmp_name'];
+      $fileSize = $_FILES['file']['size'];
+      $fileError = $_FILES['file']['error'];
+      $fileType = $_FILES['file']['type'];
+
+      $fileExt = explode('.', $fileName);
+      $fileActualExt = strtolower(end($fileExt));
+
+      $allowed = array('jpg', 'jpeg', 'png', 'pdf');
+
+      if(in_array($fileActualExt, $allowed)) {
+        if($fileError === 0) {
+          if($fileSize < 1000000) {
+            $rand = mt_rand();
+            $fileNameNew = "auctionBy".$_SESSION['id']."-{$rand}".".".$fileActualExt;
+            $fileDestination = '../auctions/'.$fileNameNew;
+            move_uploaded_file($fileTmpName, $fileDestination);
+          }
+          else {
+            echo "Maximum file size exceeded!";
+          }
+        }
+        else {
+          echo "There was an error uploading your file!";
+        }
+      }
+
+
+
+      $sql = "INSERT INTO auctions (owner, crop_type, base_price, volume, img_location) VALUES ('$owner', '$crop_type', '$base_price', '$volume', '$fileDestination')";
       mysqli_query($conn, $sql);
     
       mysqli_close($conn);
