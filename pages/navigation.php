@@ -36,14 +36,14 @@ class="navbar nav-underline sticky-lg-top navbar-expand-xxl bg-body-tertiary">
           class="nav-link active text-success"
           id="nav-link"
           aria-current="page"
-          href="AuctionPage.php"
+          href="../pages/AuctionPage.php"
           ><i class="fa-solid fa-gavel"></i> Auction Page</a
         >
       </li>
       <li class="nav-item d-block d-xxl-none">
         <a
           class="nav-link text-success"
-          href="Notifications.php"
+          href="../pages/Notifications.php"
           id="nav-link"
           ><i class="fa-solid fa-bell"></i> Notifications</a
         >
@@ -51,7 +51,7 @@ class="navbar nav-underline sticky-lg-top navbar-expand-xxl bg-body-tertiary">
       <li class="nav-item me-2">
         <a
           class="nav-link text-success"
-          href="Guidelines.php"
+          href="../pages/Guidelines.php"
           id="nav-link"
           ><i class="fa-solid fa-table"></i> Pricing Guidelines</a
         >

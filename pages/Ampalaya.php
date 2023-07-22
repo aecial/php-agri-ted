@@ -75,33 +75,35 @@
         class="desktop-view flex-wrap d-flex flex-column flex-lg-row justify-content-center justify-content-lg-start gap-5"
       >
       <?php
-        include("../database.php");
-        $sql = "SELECT * FROM auctions";
-        $result = mysqli_query($conn, $sql);
-        if(mysqli_num_rows($result) > 0) {
-          while($row = mysqli_fetch_assoc($result)){
-            if($row["crop_type"] == 1){
-              echo '
-            <div class="card" style="width: 18rem">
-            <img src="../assets/Ampalaya.jpeg" class="card-img-top" alt="" />
-            <div class="card-body">
-              <h5 class="card-title md-title">Farmer:'.$row["owner"].'</h5>
-              <div class="card-text">
-                <p class="fs-2">Volume:'.$row["volume"].' </p>
-                <p class="fs-2">Base Bid Price:'.$row["base_price"].'</p>
-                <p class="fs-2 highlight-text">Latest Bid Price: '.$row["latest_price"].'</p>
-              </div>
-              <a href="BiddingPage.html" class="btn btn-success fs-1 w-50">Bid</a>
+      include("../database.php");
+      $sql = "SELECT * FROM auctions";
+      $result = mysqli_query($conn, $sql);
+      if(mysqli_num_rows($result) > 0) {
+        while($row = mysqli_fetch_assoc($result)){
+          if($row["crop_type"] == 1){
+            echo '
+          <div class="card" style="width: 18rem">
+          <img src="'.$row["img_location"].'" class="card-img-top" alt="" />
+          <div class="card-body">
+            <h5 class="card-title md-title">Farmer:'.$row["owner"].'</h5>
+            <div class="card-text">
+              <p class="fs-2">Volume:'.$row["volume"].' </p>
+              <p class="fs-2">Base Bid Price:'.$row["base_price"].'</p>
+              <p class="fs-2 highlight-text">Latest Bid Price: '.$row["latest_price"].'</p>
             </div>
+            <a href="'.$row["auc_location"].'" class="btn btn-success fs-1 w-50">Bid</a>
           </div>
-            ';
-            }
+        </div>
+          ';
           }
+
         }
-        else {
-            echo '<h1 class="title text-center">There are no currently active listings!</h1>';
-        }
-        ?>
+        
+      }
+      else {
+          echo '<p class="title text-center text-light">There are no currently active listings!</p>';
+      }
+    ?>
         
 
       </div>

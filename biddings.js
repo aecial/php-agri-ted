@@ -41,7 +41,6 @@ function lezgo() {
   row.appendChild(date);
   tableBody.prepend(row);
   latestprice = inputPrice.value;
-  lbp.innerText = `₱ ${latestprice}`;
   inputPrice.value = null;
   btn.disabled = true;
 }

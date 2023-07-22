@@ -1,0 +1,5 @@
+$fileName = $_SERVER['PHP_SELF'];
+      $goods = explode("/", $fileName);
+      $better = $goods[3];
+      $actualFileName = explode(".", $better);
+      echo $actualFileName[0];
