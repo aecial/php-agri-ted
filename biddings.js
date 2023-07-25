@@ -41,7 +41,7 @@ function lezgo() {
   row.appendChild(date);
   tableBody.prepend(row);
   latestprice = inputPrice.value;
-  inputPrice.value = null;
+  //inputPrice.value = null;
   btn.disabled = true;
 }
 //Low boss Teddys
