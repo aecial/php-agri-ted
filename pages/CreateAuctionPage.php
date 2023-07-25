@@ -332,6 +332,8 @@
 
       $sql = "INSERT INTO auctions (auction_id, owner, crop_type, base_price, volume, img_location, auc_location) VALUES ('$rand', '$owner', '$crop_type', '$base_price', '$volume', '$fileDestination', ' $auctionDestination')";
       mysqli_query($conn, $sql);
+      $sqlCreate = "CREATE TABLE `agri1`.`$rand` (`bidder_id` INT NOT NULL , `bidder_name` VARCHAR(50) NOT NULL, `bid_price` INT NOT NULL , `bid_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, UNIQUE(`bidder_id`)) ENGINE = InnoDB;";
+      mysqli_query($conn, $sqlCreate);
     
       mysqli_close($conn);
     }
